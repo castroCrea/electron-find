@@ -359,19 +359,12 @@ function focusInput(doBlur = false) {
 }
 
 function wrapInput(inputEle, caseEle, timeout = 50) {
-  inputEle.type = 'password'
   caseEle.style['visibility'] = 'hidden'
-
-  setTimeout(() => {
-    if (inputEle.type !== 'text') {
-      print('[FindInPage] wrapInput timeout..')
-      unwrapInput(inputEle, caseEle)
-    }
-  }, timeout)
+  unwrapInput(inputEle, caseEle)
 }
 function unwrapInput(inputEle, caseEle) {
-  inputEle.type = 'text'
   caseEle.style['visibility'] = 'visible'
+  inputEle.focus();
 }
 
 function onInput() {
@@ -381,7 +374,7 @@ function onInput() {
     let text = this[findInput].value
     if (text && text !== this[lastText]) {
       this[lastText] = text
-      wrapInput(this[findInput], this[findCase], 100)
+      // wrapInput(this[findInput], this[findCase], 100)
       this.startFind(text, true, this[matchCase])
     } else if (this[lastText] && text === '') {
       this.stopFind()
@@ -421,25 +414,25 @@ function onCaseClick() {
   if (!this[matchCase]) {
     this[matchCase] = true
     this[findCase].style['border-color'] = this[config].caseSelectedColor
-    wrapInput(this[findInput], this[findCase], 100)
+    // wrapInput(this[findInput], this[findCase], 0)
     this.startFind(this[findInput].value, true, this[matchCase])
   } else {
     this[matchCase] = false
     this[findCase].style['border-color'] = 'transparent'
-    wrapInput(this[findInput], this[findCase], 100)
+    // wrapInput(this[findInput], this[findCase], 100)
     this.startFind(this[findInput].value, true, this[matchCase])
   }
 }
 
 function onBackClick() {
   this[action] = 'back'
-  wrapInput(this[findInput], this[findCase], 100)
+  // wrapInput(this[findInput], this[findCase], 200)
   this.findNext(false, this[matchCase])
 }
 
 function onForwardClick() {
   this[action] = 'forward'
-  wrapInput(this[findInput], this[findCase], 100)
+  // wrapInput(this[findInput], this[findCase], 200)
   this.findNext(true, this[matchCase])
 }
 
@@ -449,7 +442,7 @@ function onCloseClick() {
 
 function onResult() {
   this.on('result', (activeMatch, matches) => {
-    unwrapInput(this[findInput], this[findCase])
+    // unwrapInput(this[findInput], this[findCase])
     this[findMatches].innerText = `${activeMatch}/${matches}`
     matches > 0 ? unlockNext.call(this) : lockNext.call(this)
     this[action] === 'input' ? focusInput.call(this) : ''

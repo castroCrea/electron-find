@@ -52,7 +52,7 @@ class Find extends EventEmitter {
       matchCase
     })
     print(`[Find] startFind text=${text} forward=${forward} matchCase=${matchCase}`)
-    this[findInput].focus()
+    // this[findInput].focus()
   }
   findNext(forward, matchCase = false) {
     if (!this.isFinding()) throw new Error('Finding did not start yet !')
@@ -62,7 +62,7 @@ class Find extends EventEmitter {
       findNext: true
     })
     print(`[Find] findNext text=${this[preText]} forward=${forward} matchCase=${matchCase}`)
-    this[findInput].focus()
+    // this[findInput].focus()
   }
   stopFind(action) {
     stopActions.includes(action) ? '' : action = 'clearSelection'
