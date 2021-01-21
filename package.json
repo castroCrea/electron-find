@@ -1,5 +1,5 @@
 {
-  "name": "electron-find",
+  "name": "@castrocrea/electron-find",
   "version": "1.0.6",
   "description": "Find all matches for the text in electron app",
   "main": "src/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheoXiong/electron-find.git"
+    "url": "git+https://github.com/castroCrea/electron-find.git"
   },
   "keywords": [
     "find",
@@ -17,13 +17,13 @@
     "search",
     "match"
   ],
-  "author": "TheoXiong",
+  "author": "castroCrea",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TheoXiong/electron-find/issues"
+    "url": "https://github.com/castroCrea/electron-find/issues"
   },
-  "homepage": "https://github.com/TheoXiong/electron-find#readme",
+  "homepage": "https://github.com/castroCrea/electron-find#readme",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^11.0.0"
   }
 }

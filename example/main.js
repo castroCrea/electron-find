@@ -4,15 +4,18 @@ const path = require('path')
 let win
 const winURL = 'file://' + path.normalize(`${__dirname}/index.html`)
 
-function createWindow () {   
-  win = new BrowserWindow({ 
-    width: 1280,
-    height: 1040,
-    center: false,
+function createWindow() {
+  win = new BrowserWindow({
+    width: 600,
+    height: 800,
+    backgroundColor: "#202122",
+    worldSafeExecuteJavaScript: true,
+    closable: false,
     webPreferences: {
       nodeIntegration: true,
-      plugins: true,
-      } 
+      enableRemoteModule: true,
+      contextIsolation: false
+    },
   })
   win.loadURL(winURL)
   //win.webContents.openDevTools()
@@ -30,9 +33,9 @@ function createWindow () {
   win.on('blur', () => {
     globalShortcut.unregister('CommandOrControl+F')
   })
-  
+
 }
-  
+
 app.on('ready', createWindow)
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

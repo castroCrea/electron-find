@@ -40,8 +40,8 @@ const inputCnt = Symbol('inputCnt')
 const initialized = Symbol('initialized')
 const config = Symbol('config')
 
-class FindInPage extends Find{
-  constructor (webContents, options = {}) {
+class FindInPage extends Find {
+  constructor(webContents, options = {}) {
     super(webContents)
     this[findBox] = null
     this[findInput] = null
@@ -64,7 +64,7 @@ class FindInPage extends Find{
     this.options = options
     this.options.preload ? this.initialize() : ''
   }
-  initialize () {
+  initialize() {
     if (this[initialized]) {
       print('[FindInPage] Has initialize.')
       return true
@@ -96,23 +96,23 @@ class FindInPage extends Find{
     move(this[findBox], (0 - this[findBox].offsetHeight - 10), this.duration)
     return this[initialized] = true
   }
-  openFindWindow () {
+  openFindWindow() {
     if (this[hasOpened]) {
       focusInput.call(this)
       return false
     }
     if (!this.initialize()) return false
-    setTimeout(() => {  
+    setTimeout(() => {
       this[findBox].style['visibility'] = 'visible'
       lockNext.call(this)
       focusInput.call(this)
     }, 10)
     move(this[findBox], parseInt(this[config].offsetTop), this.duration)
-      .then(() => {})
+      .then(() => { })
       .catch(err => { throw err })
     return this[hasOpened] = true
   }
-  closeFindWindow () {
+  closeFindWindow() {
     if (!this[hasOpened]) return false
     this[findInput].value = ''
     this[action] = ''
@@ -125,7 +125,7 @@ class FindInPage extends Find{
       .catch(err => { throw err })
     return true
   }
-  destroy () {
+  destroy() {
     this.destroyFind()
     unbindEvents.call(this)
     this.closeFindWindow()
@@ -133,12 +133,12 @@ class FindInPage extends Find{
   }
 }
 
-function creatElement (className = '', tag = 'div') {
+function creatElement(className = '', tag = 'div') {
   const ele = document.createElement(tag)
   ele.classList.add(className)
   return ele
 }
-function getUserConfig (options) {
+function getUserConfig(options) {
   this[config].offsetTop = typeof options.offsetTop === 'number' ? `${options.offsetTop}px` : '5px'
   this[config].offsetRight = typeof options.offsetRight === 'number' ? `${options.offsetRight}px` : '5px'
   this[config].boxBgColor = typeof options.boxBgColor === 'string' ? options.boxBgColor : '#fff'
@@ -150,27 +150,27 @@ function getUserConfig (options) {
   this[config].textHoverBgColor = typeof options.textHoverBgColor === 'string' ? options.textHoverBgColor : '#eaeaea'
   this[config].caseSelectedColor = typeof options.caseSelectedColor === 'string' ? options.caseSelectedColor : '#c5ade0'
 }
-function setBoxStyle () {
+function setBoxStyle() {
   this[findBox].style.cssText = `position:fixed; top:-110%; z-index: 3001; max-height:48px; min-height:30px; 
     right:${this[config].offsetRight}; display:flex; align-items:center; box-sizing:border-box !important;
     padding:6px; visibility: hidden; background:${this[config].boxBgColor}; 
     box-shadow: 1px 1px 2px 0.5px ${this[config].boxShadowColor};`
 }
-function setInputStyle () {
+function setInputStyle() {
   this[findInput].style.cssText = `width:168px; outline:0; border:1px solid ${this[config].inputBgColor}; 
     background:${this[config].inputBgColor}; margin-right:6px; border-radius:2px; color:${this[config].inputColor}`
 }
-function setMatchesStyle () {
+function setMatchesStyle() {
   this[findMatches].innerText = '0/0'
   this[findMatches].style.cssText = `color:${this[config].textColor}; font-size:14px; display:flex; align-items:center; 
     justify-content:center; min-width:40px; max-width:64px; overflow:hidden; margin-right:4px;`
 }
-function setCaseStyle () {
+function setCaseStyle() {
   this[findCase].innerText = 'Aa'
   this[findCase].style.cssText = `font-size:14px; font-weight:700; cursor:pointer; -webkit-user-select:none; color:${this[config].textColor}; 
     padding:0px 2px; border-radius:2px; border:1px solid transparent; margin-right:4px; display:flex; align-items:center;`
 }
-function setBackStyle () {
+function setBackStyle() {
   this[findBack].style.cssText = `cursor:pointer; -webkit-user-select:none; position: relative; height: 20px; width: 20px; border-radius:2px;
     overflow: hidden; display: inline-block; background:${this[config].boxBgColor}; border:0px solid ${this[config].boxBgColor};`
 
@@ -184,7 +184,7 @@ function setBackStyle () {
     position: absolute; top:3px; left:2px; z-index:1001;`
   this[findBack].appendChild(backCover)
 }
-function setForwardStyle () {
+function setForwardStyle() {
   this[findForward].style.cssText = `cursor:pointer; -webkit-user-select:none; position: relative; height: 20px; width: 20px; border-radius:2px;
     overflow: hidden; display: inline-block; background:${this[config].boxBgColor}; border:0px solid ${this[config].boxBgColor};`
 
@@ -198,7 +198,7 @@ function setForwardStyle () {
     position: absolute; top:3px; left:3px; z-index:1001;`
   this[findForward].appendChild(forwardCover)
 }
-function setCloseStyle () {
+function setCloseStyle() {
   this[findClose].style.cssText = `cursor:pointer; -webkit-user-select:none; position: relative; height: 20px; width: 20px;
     overflow: hidden; display: inline-block; background:${this[config].boxBgColor}; border-radius:2px;`
 
@@ -212,16 +212,16 @@ function setCloseStyle () {
   position: absolute; top:9px; left:3px;`
   this[findClose].appendChild(closeInner2)
 }
-function appendElement () {
-  [this[findInput], this[findMatches], this[findCase], this[findBack], this[findForward], this[findClose]].forEach((item) => { 
-    this[findBox].appendChild(item) 
+function appendElement() {
+  [this[findInput], this[findMatches], this[findCase], this[findBack], this[findForward], this[findClose]].forEach((item) => {
+    this[findBox].appendChild(item)
   })
   this.parentElement.appendChild(this[findBox])
 }
-function removeElement () {
+function removeElement() {
   this.parentElement.removeChild(this[findBox])
 }
-function creatEventHandler () {
+function creatEventHandler() {
   this[documentKeydown] = (function (e) {
     if (!this[hasOpened]) return
     onKeydown.call(this, e)
@@ -324,25 +324,25 @@ function creatEventHandler () {
   this[events].push({ ele: this[findClose], name: 'click', fn: this[closeClick] })
 }
 
-function bindEvents () {
+function bindEvents() {
   this[events].forEach((item) => {
     on(item.ele, item.name, item.fn)
   })
 }
-function unbindEvents () {
+function unbindEvents() {
   this[events].forEach((item) => {
     off(item.ele, item.name, item.fn)
   })
 }
 
-function updateCnt () {
+function updateCnt() {
   if (this[inputCnt] >= 0xFFFFFFFE) {
     this[inputCnt] = 0
   }
   this[inputCnt]++
 }
 
-function isInputing () {
+function isInputing() {
   return new Promise((resolve, reject) => {
     let currCnt = this[inputCnt]
     setTimeout(() => {
@@ -351,14 +351,14 @@ function isInputing () {
   })
 }
 
-function focusInput (doBlur = false) {
-  setTimeout(() => { 
+function focusInput(doBlur = false) {
+  setTimeout(() => {
     doBlur ? this[findInput].blur() : ''
-    this[findInput].focus() 
+    this[findInput].focus()
   }, 50)
 }
 
-function wrapInput (inputEle, caseEle, timeout = 50) {
+function wrapInput(inputEle, caseEle, timeout = 50) {
   inputEle.type = 'password'
   caseEle.style['visibility'] = 'hidden'
 
@@ -369,12 +369,12 @@ function wrapInput (inputEle, caseEle, timeout = 50) {
     }
   }, timeout)
 }
-function unwrapInput (inputEle, caseEle) {
+function unwrapInput(inputEle, caseEle) {
   inputEle.type = 'text'
   caseEle.style['visibility'] = 'visible'
 }
 
-function onInput () {
+function onInput() {
   setTimeout(() => {
     if (this[inComposition]) return
     this[action] = 'input'
@@ -389,32 +389,35 @@ function onInput () {
       lockNext.call(this)
       focusInput.call(this, true)
     }
-  }, 50)
+  }, 100)
 }
 
-function onKeydown (e) {
+function onKeydown(e) {
   if (this[inComposition] || !e) return
   switch (e.code) {
     case 'Enter':
     case 'NumpadEnter':
+      e.preventDefault();
+      e.stopPropagation()
       let text = this[findInput].value
       if (!text) return
-      e.shiftKey ? findKeep.call(this, false) : findKeep.call(this, true)
+      e.shiftKey ? onBackClick.call(this) : onForwardClick.call(this)
+      onInput.call(this)
       break
     case 'Escape':
       onCloseClick.call(this)
       break
-    default: 
+    default:
       break
   }
 }
 
-function findKeep (forward) {
+function findKeep(forward) {
   if (!this.isFinding()) return
   forward ? onForwardClick.call(this) : onBackClick.call(this)
 }
 
-function onCaseClick () {
+function onCaseClick() {
   if (!this[matchCase]) {
     this[matchCase] = true
     this[findCase].style['border-color'] = this[config].caseSelectedColor
@@ -428,23 +431,23 @@ function onCaseClick () {
   }
 }
 
-function onBackClick () {
+function onBackClick() {
   this[action] = 'back'
   wrapInput(this[findInput], this[findCase], 100)
   this.findNext(false, this[matchCase])
 }
 
-function onForwardClick () {
+function onForwardClick() {
   this[action] = 'forward'
   wrapInput(this[findInput], this[findCase], 100)
   this.findNext(true, this[matchCase])
 }
 
-function onCloseClick () {
+function onCloseClick() {
   this.closeFindWindow() ? this.stopFind() : ''
 }
 
-function onResult () {
+function onResult() {
   this.on('result', (activeMatch, matches) => {
     unwrapInput(this[findInput], this[findCase])
     this[findMatches].innerText = `${activeMatch}/${matches}`
@@ -453,14 +456,14 @@ function onResult () {
   })
 }
 
-function lockNext () {
+function lockNext() {
   this[findBack].style['opacity'] = 0.6
   this[findBack].style['pointer-events'] = 'none'
   this[findForward].style['opacity'] = 0.6
   this[findForward].style['pointer-events'] = 'none'
 }
 
-function unlockNext () {
+function unlockNext() {
   this[findBack].style['opacity'] = 1
   this[findBack].style['pointer-events'] = 'auto'
   this[findForward].style['opacity'] = 1

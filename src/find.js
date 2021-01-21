@@ -11,7 +11,7 @@ const initd = Symbol('initd')
 const preText = Symbol('preText')
 
 class Find extends EventEmitter {
-  constructor (webContents, options = {}) {
+  constructor(webContents, options = {}) {
     super()
     this[wcs] = webContents
     this[opts] = options
@@ -21,7 +21,7 @@ class Find extends EventEmitter {
     this[initd] = false
     this[preText] = ''
   }
-  initFind () {
+  initFind() {
     if (this[initd]) return false
     if (isWebContents.call(this)) {
       bindFound.call(this)
@@ -30,30 +30,31 @@ class Find extends EventEmitter {
       throw new Error('[Find] In need of a valid webContents !')
     }
   }
-  destroyFind () {
+  destroyFind() {
     this[wcs] = null
-    this[opts]  = null
+    this[opts] = null
     this[requestId] = null
     this[activeMatch] = 0
     this[matches] = 0
     this[initd] = false
     this[preText] = ''
   }
-  isFinding () {
+  isFinding() {
     return !!this[requestId]
   }
-  startFind (text = '', forward = true, matchCase = false) {
+  startFind(text = '', forward = true, matchCase = false) {
     if (!text) return
     this[activeMatch] = 0
     this[matches] = 0
     this[preText] = text
     this[requestId] = this[wcs].findInPage(this[preText], {
       forward,
-      matchCase 
+      matchCase
     })
     print(`[Find] startFind text=${text} forward=${forward} matchCase=${matchCase}`)
+    this[findInput].focus()
   }
-  findNext (forward, matchCase = false) {
+  findNext(forward, matchCase = false) {
     if (!this.isFinding()) throw new Error('Finding did not start yet !')
     this[requestId] = this[wcs].findInPage(this[preText], {
       forward,
@@ -61,31 +62,32 @@ class Find extends EventEmitter {
       findNext: true
     })
     print(`[Find] findNext text=${this[preText]} forward=${forward} matchCase=${matchCase}`)
+    this[findInput].focus()
   }
-  stopFind (action) {
+  stopFind(action) {
     stopActions.includes(action) ? '' : action = 'clearSelection'
     this[wcs].stopFindInPage(action)
     print(`[Find] stopFind action=${action}`)
   }
 }
-function isWebContents () {
-  return (this[wcs] && 
+function isWebContents() {
+  return (this[wcs] &&
     typeof this[wcs].findInPage === 'function' &&
     typeof this[wcs].stopFindInPage === 'function')
 }
-function bindFound () {
+function bindFound() {
   this[wcs].on('found-in-page', (e, r) => {
     onFoundInPage.call(this, r)
   })
 }
-function onFoundInPage (result) {
+function onFoundInPage(result) {
   print('[Find] onFoundInPage, ', result)
   if (this[requestId] !== result.requestId) return
   typeof result.activeMatchOrdinal === 'number' ? this[activeMatch] = result.activeMatchOrdinal : ''
   typeof result.matches === 'number' ? this[matches] = result.matches : ''
   result.finalUpdate ? reportResult.call(this) : ''
 }
-function reportResult () {
+function reportResult() {
   this.emit('result', this[activeMatch], this[matches])
   typeof this[opts].onResult === 'function' ? this[opts].onResult(this[activeMatch], this[matches]) : ''
 }
